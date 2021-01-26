@@ -2,6 +2,7 @@
 All code used in Sawhney &amp; Ransom et al. (2021), including the Random Forest Classifier for BORSA identification.
 
 ## Fig. S1 - Lineage, MLST Barplots
+<pre>
 library(ggplot2)
 library(RColorBrewer)
 
@@ -42,8 +43,9 @@ barplot_core_mlst <- ggplot(data=df_core_mlst, aes(x=MLST,y=Isolate_Count,fill=f
   ggtitle("Distribution by Sequence Type")
 
 barplot_core_mlst+labs(fill="Class")
-
+</pre>
 ## Fig. S2 - ACE
+<pre>
 require(phytools)
 library(ape)
 #Read in tree
@@ -67,8 +69,10 @@ plotTree(borsa.tree,type="fan",fsize=0.7, ftype="i")
 #Add in 
 nodelabels(node=1:borsa.tree$Nnode+Ntip(borsa.tree),
            pie=classER$lik.anc,piecol=cols,cex=0.3)
+</pre>
 
 ## Fig. S3 - S. aureus Pangenome size
+<pre>
 #!/usr/bin/env Rscript
 #Take the output files from the Roary pan genome pipeline and create nice plots.
 library(ggplot2)
@@ -85,9 +89,9 @@ ggplot(data = genes, aes(x = genomes, y = genes_to_genomes, group = Key, linetyp
   xlim(c(1,length(total)))+
   xlab("No. of genomes") +
   ylab("No. of genes")+ theme_bw(base_size = 16) + theme(legend.position="bottom")
-
+</pre>
 ## Fig. 2B - Accessory_Genome_PCoA
-
+<pre>
 ##For inclusion of MRSA isolates: replace accessorygenome_df1.csv and accessorygenome_df2.csv with accessorygenome_df1_mrsa.csv and accessorygenome_df2_mrsa.csv
 
 #load vegan for jaccard distance, ape for pcoa, ggplot2 for visualization
@@ -144,9 +148,10 @@ ggplot(
 
 #Adonis test for significance in clustering (permANOVA)
 adonis(jaccard_accessorygenome~accessorygenome_df2$Class,pcoavectors_accessorygenome_corr[,c(1,2)],permutations=1000)
-
+</pre>
 
 ## Fig. 2C - ARG_Heatmap
+<pre>
 library(reshape2)
 
 resistance_df<-read.csv('r_resistance_genes.csv',
@@ -210,8 +215,9 @@ pheatmap(t(heat_pres.abs_df),
          fontsize_row = 7,
          angle_col =270,
          legend = F)
-
+</pre>
 ## Fig. 3A - Protein_Mutation
+<pre>
 library(reshape2)
 library(dendsort)
 library(pheatmap)
@@ -271,17 +277,20 @@ pheatmap(t(mutation_pres.abs_df),
          fontsize_row = 5,
          angle_col =270,
          legend = F)
+</pre>
 ## Fig. 3B - Venn Diagram (mutations)
+<pre>
 library(eulerr)
 venn_mutations<-c("BORSA (Previously reported)"=73,"BORSA (This study)"=15,"MSSA (This study)"=26,"BORSA (Previously reported)&BORSA (This study)"=1,"BORSA (Previously reported)&MSSA (This study)"=5,"BORSA (This study)&MSSA (This study)"=26,"BORSA (Previously reported)&BORSA (This study)&MSSA (This study)"=19)
 venn_colors<-c("gray","#66FFFF","#6699FF")
 #plot(venn(venn_mutations), fills = venn_colors, legend = list(side="right"))
 plot(euler(venn_mutations, shape="ellipse"),quantities=TRUE, fills = venn_colors, legend = list(side="right"))
-
+</pre>
 ## pvalue
+<pre>
 #Fisher's exact test with BH correction for mutation association by BORSA or MSSA status
 
-#_AAC refers to the combined datasets of our work and Argudín et al. (2018)
+#AAC refers to the combined datasets of our work and Argudín et al. (2018)
 alltables_AAC <- read.csv('r_pvalue_AAC.csv',
                             sep=",",
                             header = T,
@@ -292,7 +301,7 @@ p.adjust(pvalues_AAC, "BH")
 #gdpP_premature_stop p=0.001729039
 #GdpP I52V p=0.025245965
 
-#_noAAC refers to our dataset alone
+#noAAC refers to our dataset alone
 alltables_noAAC <- read.csv('r_pvalue_noAAC.csv',
                       sep=",",
                       header = T,
@@ -308,10 +317,11 @@ job2 = matrix(c(2,4,20,1,6,10,7,20,5,11),5,2)
 job1
 job2
 fisher.test(job2,simulate.p.value = TRUE, B=1e7)
-
+</pre>
 
 ## Fig. 4 - Random Forest Classifier
 ### STEP 1: FEATURE ELIMINATION (caret)
+<pre>
 ##Recursive feature elimination using caret
 library(ggplot2)
 library(caret)
@@ -358,8 +368,9 @@ for (i in 1:25) {
 print(results)
 predictors(results)
 write.csv(feature_elimination_accuracy,"feature_elimination_acc_corr.csv")
-
+</pre>
 ### STEP 2: RANDOM FOREST CLASSIFIER
+<pre>
 #Read in metadata.csv. Originally ran on the set of 72 uncorrelated features. (not final model)
 ##Used the importance function (see below) to determine the 6 most important features for Mean Decrease in Accuracy.
 ##Re-ran on a new metadata.csv file of just these 6 features (final, sparse model)
@@ -668,9 +679,10 @@ segments(1.2,-0.2,-0.2,1.2)
 lines(x=mean_specificity, y=mean_sensitivity, col = "red", lwd=2.5)
 points(x=mean_specificity, y=mean_sensitivity, pch=16, col="red", cex=0.75)
 legend(0.2,0.1,title="AUC = 0.81 ± 0.01", legend=c("ROC Curve","Luck"), col=c("red","black"),lty=1:1, lwd=2.5:0.5, cex=0.8)
-
+</pre>
 
 ### STEP 3: IMPORTANCE PLOT (Fig. 4B)
+<pre>
 library(ggplot2)
 write.csv(importance_plot,"importance_plot_100x_6_corr.csv")
 #Add SEM column to importance_plot.csv
@@ -688,10 +700,10 @@ ggplot(imp_df, aes(x=Feature, y=Average_Accuracy_Decrease))+
   theme_bw()+
   scale_y_continuous(limits = c(0,100))+
   ylab("Mean Decrease in Accuracy")+xlab("Feature")
+</pre>
 
-
-#### EXTRA CODE
-
+#### EXTRA CODE - Tuning RFC
+<pre>
 #---Tuning RFC---
 ##Determine optimal number of variables to test at each node
 a=c()
@@ -712,3 +724,4 @@ for (i in val) {
 }
 optimal_tree <- na.omit(optimal_tree)
 optimal_tree
+</pre>
