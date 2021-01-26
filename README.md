@@ -1,7 +1,7 @@
 # BORSA_RFC
 All code used in Sawhney &amp; Ransom et al. (2021), including the Random Forest Classifier for BORSA identification.
 
-#-----------------------------------------Fig. S1 - Lineage, MLST Barplots-----------------------------------------
+## Fig. S1 - Lineage, MLST Barplots=
 library(ggplot2)
 library(RColorBrewer)
 
@@ -43,7 +43,7 @@ barplot_core_mlst <- ggplot(data=df_core_mlst, aes(x=MLST,y=Isolate_Count,fill=f
 
 barplot_core_mlst+labs(fill="Class")
 
-#-----------------------------------------Fig. S2 - ACE-------------------------------------
+# Fig. S2 - ACE
 require(phytools)
 library(ape)
 #Read in tree
@@ -68,11 +68,9 @@ plotTree(borsa.tree,type="fan",fsize=0.7, ftype="i")
 nodelabels(node=1:borsa.tree$Nnode+Ntip(borsa.tree),
            pie=classER$lik.anc,piecol=cols,cex=0.3)
 
-#-----------------------------------------Fig. S3 - S. aureus Pangenome size----------------------------------
+# Fig. S3 - S. aureus Pangenome size
 #!/usr/bin/env Rscript
-# ABSTRACT: Create R plots
-# PODNAME: create_plots.R
-# Take the output files from the Roary pan genome pipeline and create nice plots.
+#Take the output files from the Roary pan genome pipeline and create nice plots.
 library(ggplot2)
 conserved = colMeans(read.table("number_of_conserved_genes.Rtab"))
 total = colMeans(read.table("number_of_genes_in_pan_genome.Rtab"))
@@ -88,7 +86,7 @@ ggplot(data = genes, aes(x = genomes, y = genes_to_genomes, group = Key, linetyp
   xlab("No. of genomes") +
   ylab("No. of genes")+ theme_bw(base_size = 16) + theme(legend.position="bottom")
 
-#-----------------------------------------Fig. 2B - Accessory_Genome_PCoA-------------------------------------------------------------------
+# Fig. 2B - Accessory_Genome_PCoA
 
 ##For inclusion of MRSA isolates: replace accessorygenome_df1.csv and accessorygenome_df2.csv with accessorygenome_df1_mrsa.csv and accessorygenome_df2_mrsa.csv
 
@@ -148,7 +146,7 @@ ggplot(
 adonis(jaccard_accessorygenome~accessorygenome_df2$Class,pcoavectors_accessorygenome_corr[,c(1,2)],permutations=1000)
 
 
-#-----------------------------------------Fig. 2C - ARG_Heatmap-------------------------------------------------------------------
+# Fig. 2C - ARG_Heatmap
 library(reshape2)
 
 resistance_df<-read.csv('r_resistance_genes.csv',
@@ -184,7 +182,7 @@ metadata_drug<-read.csv ("r_drug_metadata.csv",
 
 anno_colors = list(
   Class = c(BORSA="#66FFFF",MSSA="#6699FF",MRSA="#336666"),
-  #  Location = c(Anterior_Nares_NICU="#660000",Blood_Adult_Child ="#CC9999", Blood_NICU="#FFFFFF"),
+  #Location = c(Anterior_Nares_NICU="#660000",Blood_Adult_Child ="#CC9999", Blood_NICU="#FFFFFF"),
   MLST = c(ST1="red",ST5="yellow",ST8="#996600",ST15="#FF33FF",ST30="#006600",ST45="purple",ST59="#66CCCC",ST72="#FFCCFF",ST88="#FF9999",ST97="orange",ST398="#0000FF",Other="#CCCCCC"))
 
 #set callback function for sorting dendrogram
@@ -213,7 +211,7 @@ pheatmap(t(heat_pres.abs_df),
          angle_col =270,
          legend = F)
 
-#-----------------------------------------Fig. 3A - Protein_Mutation-------------------------------------------------------------------
+# Fig. 3A - Protein_Mutation
 library(reshape2)
 library(dendsort)
 library(pheatmap)
@@ -273,14 +271,14 @@ pheatmap(t(mutation_pres.abs_df),
          fontsize_row = 5,
          angle_col =270,
          legend = F)
-#-----------------------------------------Fig. 3B - Venn Diagram (mutations)---------------------
+# Fig. 3B - Venn Diagram (mutations)
 library(eulerr)
 venn_mutations<-c("BORSA (Previously reported)"=73,"BORSA (This study)"=15,"MSSA (This study)"=26,"BORSA (Previously reported)&BORSA (This study)"=1,"BORSA (Previously reported)&MSSA (This study)"=5,"BORSA (This study)&MSSA (This study)"=26,"BORSA (Previously reported)&BORSA (This study)&MSSA (This study)"=19)
 venn_colors<-c("gray","#66FFFF","#6699FF")
 #plot(venn(venn_mutations), fills = venn_colors, legend = list(side="right"))
 plot(euler(venn_mutations, shape="ellipse"),quantities=TRUE, fills = venn_colors, legend = list(side="right"))
 
-#-----------------------------------------pvalue--------
+# pvalue
 #Fisher's exact test with BH correction for mutation association by BORSA or MSSA status
 
 #_AAC refers to the combined datasets of our work and Argudín et al. (2018)
@@ -312,7 +310,7 @@ job2
 fisher.test(job2,simulate.p.value = TRUE, B=1e7)
 
 
-#-----------------------------------------Fig. 4 - Random Forest Classifier----------------------------------------
+# Fig. 4 - Random Forest Classifier
 #---STEP 1: FEATURE ELIMINATION (caret)---
 ##Recursive feature elimination using caret
 library(ggplot2)
