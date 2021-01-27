@@ -6,7 +6,7 @@ All code used in Sawhney &amp; Ransom et al. (2021), including the Random Forest
 library(ggplot2)
 library(RColorBrewer)
 
-#Read in barplot file
+#Read in lineage barplot file
 df_core_lineage <- read.csv('r_barplot_coregenome_lineage.csv',
                             sep=",",
                             header = T)
@@ -14,7 +14,7 @@ df_core_lineage <- read.csv('r_barplot_coregenome_lineage.csv',
 sapply(df_core_lineage, class)
 df_core_lineage$Lineage <- as.factor(df_core_lineage$Lineage)
 
-#Make barplot
+#Make lineage barplot
 barplot_core_lineage <- ggplot(data=df_core_lineage, aes(x=Lineage,y=Isolate_Count,fill=factor(Class,levels=c("MRSA","BORSA","MSSA"))))+
   geom_bar(position="stack", stat="identity", width=0.75, color="black")+
   scale_y_continuous(name="Number of Isolates", limits=c(0,50), expand=c(0,0))+
@@ -26,12 +26,22 @@ barplot_core_lineage <- ggplot(data=df_core_lineage, aes(x=Lineage,y=Isolate_Cou
 
 barplot_core_lineage+labs(fill="Class")
 
-#Read in barplot file
+#Fisher's exact test with BH correction for lineage association by BORSA or MSSA status
+#Read in contingency tables of lineage by BORSA or MSSA status.
+lineage_significance <- read.csv('r_pvalue_lineage.csv',
+                                 sep=",",
+                                 header = F,
+                                 row.names = 1)
+pvalues_lineage<-apply(lineage_significance,1,function(x) fisher.test(matrix(x,nr=2))$p.value)
+p.adjust(pvalues_lineage, "BH")
+
+
+#Read in MLST barplot file
 df_core_mlst <- read.csv('r_barplot_NICU_metadata.csv',
                          sep=",",
                          header = T)
 
-#Make barplot
+#Make MLST barplot
 barplot_core_mlst <- ggplot(data=df_core_mlst, aes(x=MLST,y=Isolate_Count,fill=factor(Class,levels=c("MRSA","BORSA","MSSA"))))+
   geom_bar(position="stack", stat="identity", width=0.75, color="black")+
   scale_y_continuous(name="Number of Isolates", limits=c(0,21), expand=c(0,0))+
@@ -43,6 +53,16 @@ barplot_core_mlst <- ggplot(data=df_core_mlst, aes(x=MLST,y=Isolate_Count,fill=f
   ggtitle("Distribution by Sequence Type")
 
 barplot_core_mlst+labs(fill="Class")
+
+#Fisher's exact test with BH correction for MLST association by BORSA or MSSA status
+#Read in contingency tables of sequence type by BORSA or MSSA status.
+mlst_significance <- read.csv('r_pvalue_mlst.csv',
+                              sep=",",
+                              header = F,
+                              row.names = 1)
+pvalues_mlst<-apply(mlst_significance,1,function(x) fisher.test(matrix(x,nr=2))$p.value)
+p.adjust(pvalues_mlst, "BH")
+
 </pre>
 ## Fig. S2 - ACE
 <pre>
@@ -277,6 +297,18 @@ pheatmap(t(mutation_pres.abs_df),
          fontsize_row = 5,
          angle_col =270,
          legend = F)
+
+#Fisher's exact test with BH correction for mutation association by BORSA or MSSA status
+#Read in contingency tables of mutation by BORSA or MSSA status, using combined datasets of our work and Argudín et al. (2018)
+mutation_significance <- read.csv('r_pvalue_AAC.csv',
+                                  sep=",",
+                                  header = F,
+                                  row.names = 1)
+pvalues_mutation<-apply(mutation_significance,1,function(x) fisher.test(matrix(x,nr=2))$p.value)
+p.adjust(pvalues_mutation, "BH")
+#gdpP_premature_stop p=0.001729039
+#GdpP I52V p=0.025245965
+         
 </pre>
 ## Fig. 3B - Venn Diagram (mutations)
 <pre>
@@ -285,38 +317,6 @@ venn_mutations<-c("BORSA (Previously reported)"=73,"BORSA (This study)"=15,"MSSA
 venn_colors<-c("gray","#66FFFF","#6699FF")
 #plot(venn(venn_mutations), fills = venn_colors, legend = list(side="right"))
 plot(euler(venn_mutations, shape="ellipse"),quantities=TRUE, fills = venn_colors, legend = list(side="right"))
-</pre>
-## pvalue
-<pre>
-#Fisher's exact test with BH correction for mutation association by BORSA or MSSA status
-
-#AAC refers to the combined datasets of our work and Argudín et al. (2018)
-alltables_AAC <- read.csv('r_pvalue_AAC.csv',
-                            sep=",",
-                            header = T,
-                            row.names = 1)
-pvalues_AAC<-apply(alltables_AAC,1,function(x) fisher.test(matrix(x,nr=2))$p.value)
-pvalues_AAC
-p.adjust(pvalues_AAC, "BH")
-#gdpP_premature_stop p=0.001729039
-#GdpP I52V p=0.025245965
-
-#noAAC refers to our dataset alone
-alltables_noAAC <- read.csv('r_pvalue_noAAC.csv',
-                      sep=",",
-                      header = T,
-                      row.names = 1)
-pvalues_noAAC<-apply(alltables_noAAC,1,function(x) fisher.test(matrix(x,nr=2))$p.value)
-p.adjust(pvalues_noAAC, "BH")
-
-job1 = matrix(c(3,5,0,6,1,2,0,1,4,3,5,3,6,6,11,2,14,3,4,10,0,1),11,2)
-job1 = matrix(c(3,3,5,0,6,1,2,0,1,4,3,5,8,2,6,5,11,2,10,3,4,7,0,1),12,2)
-job1 = matrix(c(7,3,5,0,6,2,1,4,5,13,2,6,5,11,10,4,7,1),9,2)
-job2 = matrix(c(2,4,20,1,6,10,7,20,5,11),5,2)
-
-job1
-job2
-fisher.test(job2,simulate.p.value = TRUE, B=1e7)
 </pre>
 
 ## Fig. 4 - Random Forest Classifier
