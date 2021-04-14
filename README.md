@@ -1,7 +1,7 @@
 # BORSA_RFC
 All code used in Sawhney &amp; Ransom et al. (2021), including the Random Forest Classifier for BORSA identification.
 
-## Fig. 4 - Random Forest Classifier
+## Random Forest Classifier
 ### STEP 1: FEATURE ELIMINATION (caret)
 <pre>
 ##Recursive feature elimination using caret
@@ -363,7 +363,7 @@ points(x=mean_specificity, y=mean_sensitivity, pch=16, col="red", cex=0.75)
 legend(0.2,0.1,title="AUC = 0.81 ± 0.01", legend=c("ROC Curve","Luck"), col=c("red","black"),lty=1:1, lwd=2.5:0.5, cex=0.8)
 </pre>
 
-### STEP 3: IMPORTANCE PLOT (Fig. 4B)
+### STEP 3: IMPORTANCE PLOT
 <pre>
 library(ggplot2)
 write.csv(importance_plot,"importance_plot_100x_6_corr.csv")
