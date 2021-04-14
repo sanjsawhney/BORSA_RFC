@@ -1,5 +1,5 @@
 # BORSA_RFC
-All code used in Sawhney &amp; Ransom et al. (2021), including the Random Forest Classifier for BORSA identification.
+Code relevant to the Random Forest Classifier for BORSA identification in Sawhney &amp; Ransom et al. (2021).
 
 ## Random Forest Classifier
 ### STEP 1: FEATURE ELIMINATION (caret)
@@ -21,22 +21,28 @@ mutation_all_df[sapply(mutation_all_df, is.integer)] <- lapply(mutation_all_df[s
 transform(mutation_all_df,clav_effect=as.numeric(clav_effect))
 mutation_all_df$MLST=as.numeric(mutation_all_df$MLST)
 sapply(mutation_all_df, class)
+
 #calculate correlation matrix
 correlationMatrix <- cor(mutation_all_df[,1:128])
+
 #summarize the correlation matrix
 highlyCorrelated <- findCorrelation(correlationMatrix, cutoff=0.75)
 highlyCorrelated = sort(highlyCorrelated)
+
 #Remove highly correlated variables from dataset. Left with 72 uncorrelated features
 reduced_data = mutation_all_df[,-c(highlyCorrelated)]
+
 #Change mutation 0s and 1s from integers to factors
 reduced_data[sapply(reduced_data, is.numeric)] <- lapply(reduced_data[sapply(reduced_data, is.numeric)], as.factor)
 reduced_data$clav_effect=as.numeric(reduced_data$clav_effect)
 write.csv(reduced_data,"reduced_data.csv")
+
 ##Add  Class column to reduced_data.csv
 reduced_data<-read.csv('reduced_data_corr_withClass.csv',
                        sep=",",
                        header = T,
                        row.names = 1)
+                       
 #Define the control using a random forest selection function
 feature_elimination_accuracy=data.frame(matrix(NA, nrow = 72, ncol = 2))
 for (i in 1:25) {
@@ -46,6 +52,7 @@ for (i in 1:25) {
   results <- rfe(x=reduced_data[,2:73], y=reduced_data[,1], sizes=c(1:72), rfeControl=control)
   feature_elimination_accuracy[,i]=results$results$Accuracy
 }
+
 ##summarize the results, list the minimum number of features required, and plot the results
 print(results)
 predictors(results)
