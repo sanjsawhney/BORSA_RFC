@@ -63,7 +63,7 @@ write.csv(feature_elimination_accuracy,"feature_elimination_acc_corr.csv")
 #Read in metadata.csv. Originally ran on the set of 72 uncorrelated features. (not final model)
 ##Used the importance function (see below) to determine the 6 most important features for Mean Decrease in Accuracy.
 ##Re-ran on a new metadata.csv file of just these 6 features (final, sparse model)
-mutation_df<-read.csv('RFC_metadata_6_corr_USE_THIS.csv',
+mutation_df<-read.csv('reduced_data_6features.csv',
                       sep=",",
                       header = T,
                       row.names = 1)
@@ -79,92 +79,12 @@ importance_plot=data.frame(matrix(NA, nrow = 6, ncol = 100))
 #Variable for area under the curve
 rfc_auc=c()
 ##(a1, a2) <--> (pp1, pp2) are (sensitivity, specificity coordinates) for the ROC curve
-a1=c()
-b1=c()
-c1=c()
-d1=c()
-e1=c()
-f1=c()
-g1=c()
-h1=c()
-i1=c()
-j1=c()
-k1=c()
-l1=c()
-m1=c()
-n1=c()
-o1=c()
-p1=c()
-q1=c()
-r1=c()
-s1=c()
-t1=c()
-u1=c()
-v1=c()
-w1=c()
-x1=c()
-y1=c()
-aa1=c()
-bb1=c()
-cc1=c()
-dd1=c()
-ee1=c()
-ff1=c()
-gg1=c()
-hh1=c()
-ii1=c()
-jj1=c()
-kk1=c()
-ll1=c()
-mm1=c()
-nn1=c()
-oo1=c()
-pp1=c()
+a1=b1=c1=d1=e1=f1=g1=h1=i1=j1=k1=l1=m1=n1=o1=p1=q1=r1=s1=t1=u1=v1=w1=x1=y1=aa1=bb1=cc1=dd1=ee1=ff1=gg1=hh1=ii1=jj1=kk1=ll1=mm1=nn1=oo1=pp1=c()
 
-a2=c()
-b2=c()
-c2=c()
-d2=c()
-e2=c()
-f2=c()
-g2=c()
-h2=c()
-i2=c()
-j2=c()
-k2=c()
-l2=c()
-m2=c()
-n2=c()
-o2=c()
-p2=c()
-q2=c()
-r2=c()
-s2=c()
-t2=c()
-u2=c()
-v2=c()
-w2=c()
-x2=c()
-y2=c()
-aa2=c()
-bb2=c()
-cc2=c()
-dd2=c()
-ee2=c()
-ff2=c()
-gg2=c()
-hh2=c()
-ii2=c()
-jj2=c()
-kk2=c()
-ll2=c()
-mm2=c()
-nn2=c()
-oo2=c()
-pp2=c()
+a2=b2=c2=d2=e2=f2=g2=h2=i2=j2=k2=l2=m2=n2=o2=p2=q2=r2=s2=t2=u2=v2=w2=x2=y2=aa2=bb2=cc2=dd2=ee2=ff2=gg2=hh2=ii2=jj2=kk2=ll2=mm2=nn2=oo2=pp2=c()
 
-##set.seed(8), mtry=3 - AUC: 0.8862 +/- 0.0080 (6_corr)
-set.seed(8)
+
+##set.seed(2), mtry=3 - AUC: 0.9023 +/- 0.0092
 #### Create for loop to iterate the RFC 100x
 for (i in 1:100) {
   
@@ -305,57 +225,10 @@ rfc_auc <- as.numeric(rfc_auc)
 t.test(rfc_auc)
 
 #Set NAs in sensitivity/specificity coordinates to 0 and 1 respectively
-q1[is.na(q1)] <- 0
-r1[is.na(r1)] <- 0
-s1[is.na(s1)] <- 0
-t1[is.na(t1)] <- 0
-u1[is.na(u1)] <- 0
-v1[is.na(v1)] <- 0
-w1[is.na(w1)] <- 0
-x1[is.na(x1)] <- 0
-y1[is.na(y1)] <- 0
-aa1[is.na(aa1)] <- 0
-bb1[is.na(bb1)] <- 0
-cc1[is.na(cc1)] <- 0
-dd1[is.na(dd1)] <- 0
-ee1[is.na(ee1)] <- 0
-ff1[is.na(ff1)] <- 0
-gg1[is.na(gg1)] <- 0
-hh1[is.na(hh1)] <- 0
-ii1[is.na(ii1)] <- 0
-jj1[is.na(jj1)] <- 0
-kk1[is.na(kk1)] <- 0
-ll1[is.na(ll1)] <- 0
-mm1[is.na(mm1)] <- 0
-nn1[is.na(nn1)] <- 0
-oo1[is.na(oo1)] <- 0
-pp1[is.na(pp1)] <- 0
+q1[is.na(q1)] = r1[is.na(r1)] = s1[is.na(s1)] = t1[is.na(t1)] = u1[is.na(u1)] = v1[is.na(v1)] = w1[is.na(w1)] = x1[is.na(x1)] = y1[is.na(y1)] = aa1[is.na(aa1)] = bb1[is.na(bb1)] = cc1[is.na(cc1)] = dd1[is.na(dd1)] = ee1[is.na(ee1)] = ff1[is.na(ff1)] = gg1[is.na(gg1)] = hh1[is.na(hh1)] = ii1[is.na(ii1)] = jj1[is.na(jj1)] = kk1[is.na(kk1)] = ll1[is.na(ll1)] = mm1[is.na(mm1)] = nn1[is.na(nn1)] = oo1[is.na(oo1)] = pp1[is.na(pp1)] <- 0
 
-q2[is.na(q2)] <- 1
-r2[is.na(r2)] <- 1
-s2[is.na(s2)] <- 1
-t2[is.na(t2)] <- 1
-u2[is.na(u2)] <- 1
-v2[is.na(v2)] <- 1
-w2[is.na(w2)] <- 1
-x2[is.na(x2)] <- 1
-y2[is.na(y2)] <- 1
-aa2[is.na(aa2)] <- 1
-bb2[is.na(bb2)] <- 1
-cc2[is.na(cc2)] <- 1
-dd2[is.na(dd2)] <- 1
-ee2[is.na(ee2)] <- 1
-ff2[is.na(ff2)] <- 1
-gg2[is.na(gg2)] <- 1
-hh2[is.na(hh2)] <- 1
-ii2[is.na(ii2)] <- 1
-jj2[is.na(jj2)] <- 1
-kk2[is.na(kk2)] <- 1
-ll2[is.na(ll2)] <- 1
-mm2[is.na(mm2)] <- 1
-nn2[is.na(nn2)] <- 1
-oo2[is.na(oo2)] <- 1
-pp2[is.na(pp2)] <- 1
+q2[is.na(q2)] = r2[is.na(r2)] = s2[is.na(s2)] = t2[is.na(t2)] = u2[is.na(u2)] = v2[is.na(v2)] = w2[is.na(w2)] = x2[is.na(x2)] = y2[is.na(y2)] = aa2[is.na(aa2)] = bb2[is.na(bb2)] = cc2[is.na(cc2)] = dd2[is.na(dd2)] = ee2[is.na(ee2)] = ff2[is.na(ff2)] = gg2[is.na(gg2)] = hh2[is.na(hh2)] = ii2[is.na(ii2)] = jj2[is.na(jj2)] = kk2[is.na(kk2)] = ll2[is.na(ll2)] = mm2[is.na(mm2)] = nn2[is.na(nn2)] = oo2[is.na(oo2)] = pp2[is.na(pp2)] <- 1
+
 
 #Find average sensitivity and specificity coordinates to plot average ROC curve over 100 iterations
 mean_sensitivity=c(mean(a1), mean(b1), mean(c1), mean(d1), mean(e1), mean(f1), mean(g1), mean(h1), mean(i1), mean(j1), mean(k1), mean(l1), mean(m1), mean(n1), mean(o1), mean(p1), mean(q1), mean(r1), mean(s1), mean(t1), mean(u1), mean(v1), mean(w1), mean(x1), mean(y1), mean(aa1), mean(bb1), mean(cc1), mean(dd1), mean(ee1), mean(ff1), mean(gg1), mean(hh1), mean(ii1), mean(jj1))
@@ -367,7 +240,7 @@ mean_specificity=c(mean(a2), mean(b2), mean(c2), mean(d2), mean(e2), mean(f2), m
 segments(1.2,-0.2,-0.2,1.2)
 lines(x=mean_specificity, y=mean_sensitivity, col = "red", lwd=2.5)
 points(x=mean_specificity, y=mean_sensitivity, pch=16, col="red", cex=0.75)
-legend(0.2,0.1,title="AUC = 0.81 ± 0.01", legend=c("ROC Curve","Luck"), col=c("red","black"),lty=1:1, lwd=2.5:0.5, cex=0.8)
+legend(0.25,0.15,title="AUC = 0.90 ± 0.01", legend=c("ROC Curve","Luck"), col=c("red","black"),lty=1:1, lwd=2.5:0.5, cex=0.8)
 </pre>
 
 ### STEP 3: IMPORTANCE PLOT
@@ -385,9 +258,10 @@ imp_df$Feature<-factor(imp_df$Feature, levels=imp_df$Feature[order(imp_df$Averag
 ggplot(imp_df, aes(x=Feature, y=Average_Accuracy_Decrease))+
   geom_point(stat='identity')+
   coord_flip()+
-  geom_errorbar(aes(ymin=Average_Accuracy_Decrease-SE, ymax=Average_Accuracy_Decrease+SE),width=0.2,position=position_dodge(0.05))+
+  geom_errorbar(aes(ymin=Average_Accuracy_Decrease-SE, ymax=Average_Accuracy_Decrease+SE),width=0.2,position=position_dodge(0.0))+
   theme_bw()+
-  scale_y_continuous(limits = c(0,100))+
+  theme(text = element_text(size=15,face = "bold"),axis.text.y = element_text(size=7,face="bold"))+
+  scale_y_continuous(limits = c(-7,39))+
   ylab("Mean Decrease in Accuracy")+xlab("Feature")
 </pre>
 
